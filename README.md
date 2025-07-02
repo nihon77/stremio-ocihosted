@@ -1,4 +1,4 @@
-# stremio-selfhosted  
+# stremio-ocihosted  
 **Stremio Stack con Mammamia, Media Flow Proxy e altro ancora**
 
 Questo repository contiene istruzioni, configurazioni e suggerimenti per il self-hosting Oracle Cloud Free Tier di un'intera istanza privata di Stremio, con plugin **Mammamia**, **media-flow-proxy**, **StreamV** e altri componenti opzionali.

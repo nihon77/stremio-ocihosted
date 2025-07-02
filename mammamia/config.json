@@ -1,0 +1,93 @@
+{
+    "Siti": {
+        "StreamingCommunity": {
+            "url": "https://streamingunity.cam",
+            "SC_ForwardProxy": "0",
+            "SC_PROXY": "0",
+            "VX_ForwardProxy": "0",
+            "VX_PROXY": "0",
+            "enabled": "1"
+        },
+        "Filmpertutti": {
+            "url": "https://filmpertutti.motorcycles",
+            "enabled": "1"
+        },
+        "Tantifilm": {
+            "url": "https://www.tanti.bond",
+            "TF_ForwardProxy": "0",
+            "TF_PROXY": "1",
+            "enabled": "1"
+        },
+        "Mysterius": {
+            "enabled": "0"
+        },
+        "LordChannel": {
+            "url": "https://lordchannel.net",
+            "enabled": "1"
+        },
+        "StreamingWatch": {
+            "url": "https://www.streamingwatch.org",
+            "enabled": "1"
+        },
+        "CB01": {
+            "url": "https://cb01net.download",
+            "CB_PROXY": "1",
+            "CB_ForwardProxy": "0",
+            "MX_ForwardProxy": "0",
+            "MX_PROXY": "0",
+            "enabled": "1"
+        },
+        "DDLStream": {
+            "url": "https://ddlstreamitaly.co",
+            "cookies": {
+                "ips4_device_key": "4d593f81e70b49c0dbe21631c43d7c89",
+                "ips4_IPSSessionFront": "6b5fc4a527677121f0b9830167fe1062",
+                "ips4_member_id": "4030426",
+                "ips4_login_key": "735a7725fe58068c32b5b85546290525"
+            },
+            "enabled": "1"
+        },
+        "Guardaserie": {
+            "url": "https://guardaserietv.blog",
+            "enabled": "1",
+            "GS_ForwardProxy": "0",
+            "GS_PROXY": "1"
+        },
+        "GuardaHD": {
+            "url": "https://guardahd.stream",
+            "enabled": "1",
+            "GH_ForwardProxy": "0",
+            "GH_PROXY": "1"
+        },
+        "Onlineserietv": {
+            "domain": "com",
+            "enabled": "1",
+            "OST_ForwardProxy": "0",
+            "OST_PROXY": "0"
+        },
+        "AnimeWorld": {
+            "url": "https://www.animeworld.ac",
+            "enabled": "1",
+            "AW_ForwardProxy": "0",
+            "AW_PROXY": "1"
+        },
+        "SkyStreaming": {
+            "url": "https://skystreaming.stream",
+            "enabled": "1"
+        },
+        "DaddyLiveHD": {
+            "url": "https://daddylive.dad",
+            "enabled": "1"
+        }
+    },
+    "General": {
+        "load_env": "0",
+        "HOST": "0.0.0.0",
+        "PORT": "8080",
+        "Name": "MammAnna",
+        "Icon": "🍕️",
+        "Public_Instance": "0",
+        "Remote_Instance": "1",
+        "Global_Proxy": "0"
+    }
+}

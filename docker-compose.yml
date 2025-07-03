@@ -64,7 +64,8 @@ services:
     networks:
       - proxy
   aiostreams:
-    build: https://github.com/Viren070/AIOStreams.git#main
+    #build: https://github.com/Viren070/AIOStreams.git#main
+    image: ghcr.io/viren070/aiostreams:latest
     container_name: aiostreams
     env_file:
       - ./aiostreams/.env

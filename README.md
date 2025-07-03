@@ -77,7 +77,7 @@ Hai deciso di configurare una tua istanza privata di Mammamia e Media Flow Proxy
 
 Poiché poichè l'ip assegnato alle istanze create su OCP è dinamico, è necessario un sistema per mantenere accessibile il tuo server anche quando l’IP cambia.
 - Un **IP pubblico** (va bene anche se dinamico).
-- Un account gratuito su [**duckdns.org**](https://www.duckdns.org) per creare **hostname statici** che puntano sempre al tuo NAS.
+- Un account gratuito su [**duckdns.org**](https://www.duckdns.org) per creare **hostname statici** che puntano sempre alle tue istanze.
 - Normalmente l'accesso alle istanze OCP è permesso solo sulla porta 22 (SSH) è necessario aprire l'accesso anche le porte:
   - Porta **80** (HTTP) 
   - Porta **443** (HTTPS)
@@ -86,7 +86,7 @@ Poiché poichè l'ip assegnato alle istanze create su OCP è dinamico, è necess
 > 🔁 Questo setup è fondamentale per permettere a Nginx Proxy Manager di ottenere e rinnovare automaticamente i certificati SSL tramite Let’s Encrypt.
 
 
-### 🔐 Creazione degli hostname su No-IP
+### 🔐 Creazione degli hostname su duckdns.org
 
 Per accedere alle tue applicazioni da remoto, devi creare 3 hostname pubblici gratuiti su [**duckdns.org**](https://www.duckdns.org).
 
@@ -98,7 +98,7 @@ Per accedere alle tue applicazioni da remoto, devi creare 3 hostname pubblici gr
 - `streamv-mario.duckdns.org`
 Puoi ovviamente scegliere qualsiasi nome, purché sia disponibile e facile da ricordare.
 
-Questi hostname punteranno sempre al tuo NAS anche se il tuo IP cambia.  
+Questi hostname punteranno sempre alle tue istanze anche se il tuo IP cambia.  
 Il tutto è possibile installando un piccolo agente (Dynamic DNS client) che aggiorna automaticamente il record DNS.
 
 > ℹ️ In realtà Oracle Cloud Platform nel piano Free Tier permette di avere fino a 2 indirizzi ip pubblici riservati da assegnare alle istanze dopo la creazione. Ovviamente questi IP essendo riservati e assegnati staticamente alle vostre istanze non cambieranno mai nel corso del tempo. Il mio consiglio è di utilizzare questi ip per progetti più importanti... tanto la soluzione c'è
@@ -154,7 +154,7 @@ Questo significa che i servizi **non sono accessibili dall’esterno se non tram
 - Nella sezione **Basic Information**:
   - Inserisci un **nome** per la tua istanza
   - Clicca su **Change Image**
-    - Seleziona **Ubuntu Server Minimal 22.04**
+    - Seleziona **Ubuntu Server Minimal 24.04**
     - Scegli l'**architettura** in base al tipo di istanza che desideri (es. AMD64 o ARM)
     - La **Shape** (configurazione hardware) verrà aggiornata automaticamente
   ![image](https://github.com/user-attachments/assets/37ce9740-0fa8-40a9-94d9-695e457b3f13)
@@ -208,9 +208,9 @@ Puoi connetterti via SSH utilizzando la chiave privata che hai scaricato
 
 ---
 
-## 🔧 Configurazione hostname statici con No-IP
+## 🔧 Configurazione hostname statici con duckdns.org
 
-Gli IP pubblici assegnati alle istanze Oracle Cloud normalmente sono dinamici, No-IP ti permette di associare un hostname che si aggiorna automaticamente ogni volta che l'IP della tua istanza cambia. Ecco come fare:
+Gli IP pubblici assegnati alle istanze Oracle Cloud normalmente sono dinamici, duckdns.org ti permette di associare un hostname che si aggiorna automaticamente ogni volta che l'IP della tua istanza cambia. Ecco come fare:
 
 ### 1. Registrazione e login
 
@@ -283,39 +283,48 @@ resolvectl status
 
 ### 📥 Installazione Docker
 
-```bash
+
 # 🔁 Rimuovi eventuali versioni precedenti
+```bash
 sudo apt remove docker docker-engine docker.io containerd runc
-
+```
 # 🔄 Aggiorna l’elenco dei pacchetti
+```bash
 sudo apt update
-
+```
 # 📦 Installa i pacchetti richiesti per aggiungere il repository Docker
+```bash
 sudo apt install -y ca-certificates curl gnupg lsb-release
-
+```
 # 🗝️ Aggiungi la chiave GPG ufficiale di Docker
+```bash
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | \
   sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-
+```
 # 📥 Aggiungi il repository Docker alle fonti APT
+```bash
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
   https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
   $(lsb_release -cs) stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
+```
 # 🐳 Installa Docker, Docker Compose e altri componenti
+```bash
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
+```
 # 👤 Aggiungi il tuo utente al gruppo docker
+```bash
 sudo usermod -aG docker $USER
-
+```
 # ⚠️ Per applicare il cambiamento, esegui il logout/login oppure:
+```bash
 newgrp
-
+```
 # ✅ Verifica che Docker funzioni correttamente
-docker run hello-world
+```bash
+sudo docker run hello-world
 ```
 
 ---
@@ -335,7 +344,11 @@ Assicurati di avere:
 
 ```bash
 cd ~
+```
+```bash
 git clone https://github.com/tuo-utente/tuo-repo.git
+```
+```bash
 cd tuo-repo
 ```
 
@@ -343,7 +356,7 @@ cd tuo-repo
 Se non l'hai già fatto, crea la rete che verrà utilizzata da Nginx Proxy Manager e dagli altri container per comunicare tra loro:
 
 ```bash
-docker network create proxy
+sudo docker network create proxy
 ```
 >🔁 Questo comando va eseguito una sola volta. Se la rete esiste già, Docker mostrerà un errore che puoi ignorare in sicurezza.
 
@@ -396,7 +409,7 @@ TZ=Europe/Rome
 🛑 Attenzione alla sicurezza: imposta i permessi del file .env in modo che sia leggibile solo dal tuo utente, ad esempio:
 
 ```bash
-chmod 600 ./duckdns-updater/.env
+sudo chmod 600 ./duckdns-updater/.env
 ```
 
 🔁 Ricorda di sostituire:
@@ -409,7 +422,7 @@ SUBDOMAINS → con i tuoi hostname specifici separati da virgole (host1,host2 ec
 Per buildare le immagini (se definite tramite build: con URL GitHub) e avviare tutto in background:
 
 ```bash
-docker compose up -d --build
+sudo docker compose up -d --build
 ```
 > 🧱 Il flag --build forza Docker a scaricare i Dockerfile remoti ed eseguire la build, anche se l'immagine esiste già localmente.
 
@@ -459,7 +472,7 @@ Assicurati di aver creato 3 hostname statici su [**duckdns.org**](https://www.du
    - **Source CIDR**: `0.0.0.0/0`
    - **IP Protocol**: `TCP`
    - **Source Port Range**: `All`
-   - **Destination Port Range**: `80, 443, 8080`
+   - **Destination Port Range**: `80,443,8080`
    ![image](https://github.com/user-attachments/assets/2fcb6879-9337-43d9-b4cc-970dd1828e80)
 
 Salva le modifiche. Ora la tua istanza potrà ricevere connessioni su HTTP/HTTPS.
@@ -470,7 +483,7 @@ Salva le modifiche. Ora la tua istanza potrà ricevere connessioni su HTTP/HTTPS
 ### 3. Configurazione dei proxy host in Nginx Proxy Manager
 
 Per ogni applicazione, crea un nuovo **Proxy Host** in NPM seguendo questi passi:
-- **accedi ad http://<ip-tuo-server>:8080** (al primo accesso le credenziali di default sono **Email: admin@example.com Password: changeme**. Vi verrà chiesto di modificarle)
+- **accedi ad http://<</ip-tuo-server>>:8080** (al primo accesso le credenziali di default sono **Email: admin@example.com Password: changeme**. Vi verrà chiesto di modificarle)
 - **Dalla barra di menu selezionate **Hosts** → **Proxy Hosts** → **Add New Proxy**
 - **Domain Names:** inserisci l’hostname corrispondente (es. `mammamia-<tuo-id>.duckdns.org`)
 - **Scheme:** `http`
@@ -508,7 +521,6 @@ Ripeti questa configurazione per ciascuno dei tre hostname con la rispettiva por
 
 - Dopo aver configurato i proxy host, prova ad accedere agli URL pubblici via browser.
 - NPM gestirà automaticamente il rinnovo dei certificati SSL.
-- Assicurati che il tuo router sia sempre configurato correttamente per il port forwarding, specialmente dopo eventuali riavvii o aggiornamenti firmware.
 
 ---
 

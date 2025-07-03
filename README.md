@@ -96,6 +96,8 @@ Per accedere alle tue applicazioni da remoto, devi creare 3 hostname pubblici gr
 - `mammamia-mario.duckdns.org`
 - `mfp-mario.duckdns.org`
 - `streamv-mario.duckdns.org`
+- `aiostreams-mario.duckdns.org`
+
 Puoi ovviamente scegliere qualsiasi nome, purché sia disponibile e facile da ricordare.
 
 Questi hostname punteranno sempre al tuo NAS anche se il tuo IP cambia.  
@@ -128,6 +130,7 @@ cd <nome-repo>
 | **[StreamV](https://github.com/qwertyuiop8899/StreamV)**|steamv        | 7860(*)          | Web player personalizzato (opzionale)    |
 | **[Nginx Proxy Manager](https://github.com/NginxProxyManager/nginx-proxy-manager)**|npm | 80/443/8080 | Reverse proxy + certificati Let's Encrypt |
 | **[docker-duckdns](https://github.com/linuxserver/docker-duckdns)** |duckdns-updater |—         | Aggiorna il DNS dinamicamente            |
+| **[AIOStreams](https://github.com/Viren070/AIOStreams)** |aiostreams |3000(*)        | multipli Stremio addons and debrid services in un solo plugin|
 
 >ℹ️ (*)Le **porte elencate (tranne quelle di Nginx Proxy Manager)** sono **interne alla rete Docker** e **non sono esposte direttamente** sulla macchina host.
 Questo significa che i servizi **non sono accessibili dall’esterno se non tramite Nginx Proxy Manager**, che funge da gateway sicuro con supporto a **HTTPS e Let's Encrypt**.
@@ -236,6 +239,7 @@ Gli IP pubblici assegnati alle istanze Oracle Cloud normalmente sono dinamici, N
 
   - `mfp-mario.duckdns.org`
   - `streamv-mario.duckdns.org`
+  - `aiostreams-mario.duckdns.org`
 
 <img width="1818" alt="Screenshot 2025-07-03 at 11 27 55" src="https://github.com/user-attachments/assets/9d70c20c-985e-410f-9638-a2bf7c7d9988" />
 
@@ -382,7 +386,19 @@ MFP_URL="https://mfp-mario.ddns.net"
 BOTHLINK=true
 ```
 
-**4. .env per DuckDNS Updater**
+**4. .env per AIOStreams**
+Per configurare il plugin AIOStreams è necessario configurare il relativo file .env. Vi rimando al repo del progetto per i dettagli.
+
+📄 Esempio: ./AIOStreams/.env
+```text
+#queste sono le impostazioni minime per il corretto funzionamento del plugin
+ADDON_ID="aiostreams-mario.duckdns.org"
+BASE_URL=https://aiostreams-mario.duckdns.org
+SECRET_KEY=36148382b90f80430d69075df9848eee87032d16fc4c03fe9ca7ce53b7028973  (può essere generata con openssl rand -hex 32)
+ADDON_PASSWORD=password_a_scelta
+```
+
+**5. .env per DuckDNS Updater**
 Per configurare correttamente il client DDNS, è necessario un file .env contenente le credenziali e gli hostname associati al tuo account DuckDns.
 
 📄 Esempio: ./duckdns-updater/.env
@@ -475,7 +491,7 @@ Per ogni applicazione, crea un nuovo **Proxy Host** in NPM seguendo questi passi
 - **Domain Names:** inserisci l’hostname corrispondente (es. `mammamia-<tuo-id>.duckdns.org`)
 - **Scheme:** `http`
 - **Forward Hostname / IP:** il mome del servizio cosi come configurato nel docker-compose ovvero mammmia, mediaflow_proxy e streamv
-- **Forward Port:** la porta interna dove l’app è in ascolto (es. `8080` per Mammamia, `8888` per mediaflow_proxy e `7860` per streamv)
+- **Forward Port:** la porta interna dove l’app è in ascolto (es. `8080` per Mammamia, `8888` per mediaflow_proxy, `7860` per streamv e `3000` per aiostreams)
 - Abilita le seguenti opzioni:
   - **Block Common Exploits**
   - **Websockets Support** (se necessario)

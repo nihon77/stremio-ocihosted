@@ -45,7 +45,7 @@ Oracle Cloud offre un piano gratuito **senza scadenza** con una serie di servizi
 
 - ✅ **fino a 2 istanze Ampere A1 (ARM)** fino a 4 OCPU e 24 GB RAM **totali**
 - ✅ **2 istanza AMD (x86)** VM.Standard.E2.1.Micro
-- ✅ **2 volumi di storage block** da 200 GB ciascuno
+- ✅ **200 GB totale di storage block** da da utilizzare per le Compute Istances
 - ✅ **10 GB di Object Storage**
 - ✅ **Rete virtuale (VCN) gratuita** con indirizzo IP pubblico
 - ✅ **Accesso a strumenti avanzati** come Load Balancer, Monitoring, CLI, SDK, e Terraform

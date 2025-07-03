@@ -63,12 +63,22 @@ services:
     command: pnpm start
     networks:
       - proxy
- 
+  aiostreams:
+    build: https://github.com/Viren070/AIOStreams.git#main
+    container_name: aiostreams
+    env_file:
+      - ./aiostreams/.env
+    volumes:
+      - aiostreams-data:/app/data
+    restart: unless-stopped 
+    networks:
+      - proxy
 
 volumes:
   npm-data:
   npm-letsencrypt:
   duckdns-data:
+  aiostreams-data:
 
 networks:
   proxy:

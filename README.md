@@ -456,11 +456,12 @@ Per rendere accessibili le tue applicazioni web da internet in modo sicuro, user
 
 ### 1. Creazione dei tre hostname su DuckDns
 
-Assicurati di aver creato 3 hostname statici su [**duckdns.org**](https://www.duckdns.org) che puntino al tuo IP pubblico (anche se dinamico, aggiornato tramite l’agent docker-duckdns):
+Assicurati di aver creato 4 hostname statici su [**duckdns.org**](https://www.duckdns.org) che puntino al tuo IP pubblico (anche se dinamico, aggiornato tramite l’agent docker-duckdns):
 
 - `mammamia-<tuo-id>.duckdns.org`
 - `mfp-<tuo-id>.duckdns.org`
 - `streamv-<tuo-id>.duckdns.org`
+- `aiostream-<tuo-id>.duckdns.org`
 
 > 🔔 **Suggerimento:** Usa un identificativo unico (`<tuo-id>`) per evitare conflitti con altri utenti DuckDns.
 

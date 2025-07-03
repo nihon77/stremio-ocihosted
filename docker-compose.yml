@@ -16,14 +16,14 @@ services:
       - npm-letsencrypt:/etc/letsencrypt
     networks:
       - proxy
-  noip-updater:
-    image: ghcr.io/noipcom/noip-duc:latest
-    container_name: noip-updater
+  duckdns-updater:
+    image: linuxserver/duckdns
+    container_name: duckdns-updater
     restart: unless-stopped
     env_file:
-      - ./noip-updater/.env
+      - ./duckdns-updater/.env
     volumes:
-      - noip-data:/config
+      - duckdns-data:/config
     networks:
       - proxy
   mediaflow_proxy:
@@ -68,7 +68,7 @@ services:
 volumes:
   npm-data:
   npm-letsencrypt:
-  noip-data:
+  duckdns-data:
 
 networks:
   proxy:

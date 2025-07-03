@@ -77,7 +77,7 @@ Hai deciso di configurare una tua istanza privata di Mammamia e Media Flow Proxy
 
 Poiché poichè l'ip assegnato alle istanze create su OCP è dinamico, è necessario un sistema per mantenere accessibile il tuo server anche quando l’IP cambia.
 - Un **IP pubblico** (va bene anche se dinamico).
-- Un account gratuito su [**No-IP.com**](https://www.noip.com/) per creare **hostname statici** che puntano sempre al tuo NAS.
+- Un account gratuito su [**duckdns.org**](https://www.duckdns.org) per creare **hostname statici** che puntano sempre al tuo NAS.
 - Normalmente l'accesso alle istanze OCP è permesso solo sulla porta 22 (SSH) è necessario aprire l'accesso anche le porte:
   - Porta **80** (HTTP) 
   - Porta **443** (HTTPS)
@@ -88,14 +88,14 @@ Poiché poichè l'ip assegnato alle istanze create su OCP è dinamico, è necess
 
 ### 🔐 Creazione degli hostname su No-IP
 
-Per accedere alle tue applicazioni da remoto, devi creare 3 hostname pubblici gratuiti su [No-IP.com](https://www.noip.com/).
+Per accedere alle tue applicazioni da remoto, devi creare 3 hostname pubblici gratuiti su [**duckdns.org**](https://www.duckdns.org).
 
 > ⚠️ Gli hostname devono essere univoci. Il mio consiglio è quello di aggiungere un identificativo personale (es. il tuo nome o una sigla) per evitare conflitti.
 
 #### Esempi di hostname personalizzati:
-- `mammamia-mario.ddns.net`
-- `mfp-mario.ddns.net`
-- `streamv-mario.ddns.net`
+- `mammamia-mario.duckdns.org`
+- `mfp-mario.duckdns.org`
+- `streamv-mario.duckdns.org`
 Puoi ovviamente scegliere qualsiasi nome, purché sia disponibile e facile da ricordare.
 
 Questi hostname punteranno sempre al tuo NAS anche se il tuo IP cambia.  
@@ -127,7 +127,7 @@ cd <nome-repo>
 | **[Media Flow Proxy (MFP)](https://github.com/mhdzumair/mediaflow-proxy)**|mediaflow_proxy | 8888(*)   | Proxy per streaming video                |
 | **[StreamV](https://github.com/qwertyuiop8899/StreamV)**|steamv        | 7860(*)          | Web player personalizzato (opzionale)    |
 | **[Nginx Proxy Manager](https://github.com/NginxProxyManager/nginx-proxy-manager)**|npm | 80/443/8080 | Reverse proxy + certificati Let's Encrypt |
-| **[No-IP DUC (Docker)](https://github.com/noipcom/linux-update-client-docker/pkgs/container/noip-duc)** |noip-updater |—         | Aggiorna il DNS dinamicamente            |
+| **[docker-duckdns](https://github.com/linuxserver/docker-duckdns)** |duckdns-updater |—         | Aggiorna il DNS dinamicamente            |
 
 >ℹ️ (*)Le **porte elencate (tranne quelle di Nginx Proxy Manager)** sono **interne alla rete Docker** e **non sono esposte direttamente** sulla macchina host.
 Questo significa che i servizi **non sono accessibili dall’esterno se non tramite Nginx Proxy Manager**, che funge da gateway sicuro con supporto a **HTTPS e Let's Encrypt**.
@@ -214,55 +214,30 @@ Gli IP pubblici assegnati alle istanze Oracle Cloud normalmente sono dinamici, N
 
 ### 1. Registrazione e login
 
-- Vai su [https://www.noip.com/](https://www.noip.com/)
-- Clicca su **Sign Up** e crea un account gratuito.
-- Verifica la tua email e accedi con le credenziali create.
+- Vai su [https://www.duckdns.org/](https://www.duckdns.org/)
+- Clicca su **Sign In With GitHub/Google/QuelloCheVipare** e crea un account gratuito.
 
 ### 2. Creazione degli hostname (Dynamic DNS)
 
-- Dopo il login, clicca su **Dashboard** → **DDNS & Remote Access** → **No-Ip Hostnames** → **Create Hostname**.
+- Dopo il login, vi ritroverete direttamente nella **Dashboard** di DuckDns. Notate nella sezione in alto il vostro token identificatvo che utilizzeremo nel .env del container duckdns.
 - Inserisci il nome host, ad esempio:
 
-  - `mammamia-mario e selezionate un dominio come ad esempio .ddns.net`
+  - `mammamia-mario`
   
   Scegli un nome unico che ti permetta di riconoscerlo facilmente.
+- Premi **Add Domain**.
+- Nel campo **Current IP**, vedrai il tuo IP pubblico attuale (se errato, correggilo con quello giusto).
 
-- Nel campo **Record Type** lascia selezionato **DNS Host (A)**.
-- Nel campo **IPv4 Address**, vedrai il tuo IP pubblico attuale. Va modificato con l'ip pubblico della nostra istanza su Oracle Cloud
-- Premi **Create Hostname**.
-<img width="1811" alt="Screenshot 2025-06-28 at 19 15 26" src="https://github.com/user-attachments/assets/437f32d3-7db1-40b4-b864-4fa33a072625" />
+<img width="1818" alt="Screenshot 2025-07-03 at 11 23 30" src="https://github.com/user-attachments/assets/f44d2ab9-ce39-43ff-b61a-1b204a266711" />
 
 ### 3. Ripeti per gli altri due hostname
 
 - Crea altri due hostname per:
 
-  - `mfp-mario.ddns.net`
-  - `streamv-mario.ddns.net`
-<img width="1811" alt="Screenshot 2025-06-28 at 19 20 04" src="https://github.com/user-attachments/assets/d432cfdb-7763-4f48-8f92-51622acd4f16" />
+  - `mfp-mario.duckdns.org`
+  - `streamv-mario.duckdns.org`
 
-> ⚠️ **Attenzione:** Se vedi una scritta gialla accanto a un hostname su No-IP, significa che **l'aggiornamento automatico dell'indirizzo IP non è attivo**.  
-> Andremo successivamente a configurare correttamente il client No-IP (DUC) per mantenerlo aggiornato.
-
-> 📩 **Nota importante:** No-IP, nel piano gratuito, richiede il **rinnovo manuale mensile degli hostname**.  
-> Riceverai un'email ogni 30 giorni per confermare **gratuitamente** che desideri mantenere attivo ciascun hostname.  
-> Se **non li rinnovi**, gli hostname verranno disattivati e **non saranno più raggiungibili**.
-
-### 4. Creazione del gruppo ddnskey su No-IP
-Per aggiornare automaticamente gli hostname tramite client come noip-updater, è consigliato non usare direttamente la tua password dell’account, ma creare un gruppo chiamato ddnskey e generare una password dedicata all’aggiornamento IP.
-
-🧭 Passaggi:
-
-Vai su **Dashboard** → **DDNS & Remote Access** → **DDNS Keys**.
-Clicca su "Add Group" (Aggiungi gruppo).
-Dai al gruppo il nome: ddnskey_streamio (ad esempio).
-Associa al gruppo gli hostname che vuoi aggiornare (es. mammamia-xxx.ddns.net, mfp-xxx.ddns.net, ecc.).
-<img width="1667" alt="Screenshot 2025-06-30 at 17 47 52" src="https://github.com/user-attachments/assets/e6e7d3ad-7526-422e-8044-9fff95d4b88c" />
-
-Inserisci una nuova password sicura per questo gruppo (diversa da quella del tuo account principale) cliccando su **Add DDNS Key** e successivamente **Generate DDNS Key**.
-Salva.<img width="1666" alt="Screenshot 2025-06-30 at 17 54 11" src="https://github.com/user-attachments/assets/8bee49a0-8ebf-46e3-8d8e-0ba80039131a" /><img width="1666" alt="Screenshot 2025-06-30 at 17 54 11" src="https://github.com/user-attachments/assets/1344ee82-c504-4d2d-8c44-a248cd72e11a" />
-
-
-📌 Questa password sarà quella da inserire nel .env per il container noip-updater.
+<img width="1818" alt="Screenshot 2025-07-03 at 11 27 55" src="https://github.com/user-attachments/assets/9d70c20c-985e-410f-9638-a2bf7c7d9988" />
 
 ---
 
@@ -372,7 +347,7 @@ docker network create proxy
 ```
 >🔁 Questo comando va eseguito una sola volta. Se la rete esiste già, Docker mostrerà un errore che puoi ignorare in sicurezza.
 
-### 🛠️ Creazione dei file .env per MammaMia,Media Flow Proxy,StreamV e NoIp-Duc
+### 🛠️ Creazione dei file .env per MammaMia,Media Flow Proxy,StreamV e docker-duckdns
 In ogni sotto cartella di questo progetto è presente un file .env_example con tutte le chiavi necessarie per il corretto funzionamento dei vari moduli.
 Per ogni modulo copiare e rinominare il file .env_example in .env. I vari .env dovranno essere modificati in base alle vostre specifiche configurazioni.
 
@@ -407,27 +382,26 @@ MFP_URL="https://mfp-mario.ddns.net"
 BOTHLINK=true
 ```
 
-**4. .env per NoIp-Duc**
-Per configurare correttamente il client DDNS (come noip-updater), è necessario un file .env contenente le credenziali e gli hostname o gruppi associati al tuo account No-IP.
+**4. .env per DuckDNS Updater**
+Per configurare correttamente il client DDNS, è necessario un file .env contenente le credenziali e gli hostname associati al tuo account DuckDns.
 
-📄 Esempio: ./noip-updater/.env
+📄 Esempio: ./duckdns-updater/.env
 ```text
-# File .env per il client DDNS con DDNS Key
-NOIP_USERNAME=DdnsKeyUser
-NOIP_PASSWORD=DdnsKeyPass
-NOIP_HOSTNAMES=all.ddnskey.com
+# File .env per il client DDNS
+SUBDOMAINS=mammamia,mfp,streamv
+TOKEN=IL_TUO_TOKEN
+TZ=Europe/Rome
 ```
 
 🛑 Attenzione alla sicurezza: imposta i permessi del file .env in modo che sia leggibile solo dal tuo utente, ad esempio:
 
 ```bash
-chmod 600 ./noip_updater/.env
+chmod 600 ./duckdns-updater/.env
 ```
 
 🔁 Ricorda di sostituire:
-DdnsKeyUser → con l'indirizzo email del tuo account No-IP.
-DdnsKeyPass → con la password associata al gruppo ddnskey.
-NOIP_HOSTNAMES → con i tuoi hostname specifici separati da virgole (host1.ddns.net,host2.ddns.net) oppure all.ddnskey.com che vuol dire tutti gli hostname del gruppo.
+IL_TUO_TOKEN → con il token visibile sulla Dashboard di DuckDns.
+SUBDOMAINS → con i tuoi hostname specifici separati da virgole (host1,host2 ecc senza .duckdns.org).
 
 
 ### 🏗️ Build delle immagini e avvio dei container
@@ -464,15 +438,15 @@ docker compose up -d --build
 
 Per rendere accessibili le tue applicazioni web da internet in modo sicuro, useremo **Nginx Proxy Manager (NPM)**. Questo tool semplifica la gestione dei proxy inversi e automatizza l’ottenimento dei certificati SSL con Let’s Encrypt.
 
-### 1. Creazione dei tre hostname su No-IP
+### 1. Creazione dei tre hostname su DuckDns
 
-Assicurati di aver creato 3 hostname statici su [No-IP.com](https://www.noip.com/) che puntino al tuo IP pubblico (anche se dinamico, aggiornato tramite l’agent No-IP):
+Assicurati di aver creato 3 hostname statici su [**duckdns.org**](https://www.duckdns.org) che puntino al tuo IP pubblico (anche se dinamico, aggiornato tramite l’agent docker-duckdns):
 
-- `mammamia-<tuo-id>.ddns.net`
-- `mfp-<tuo-id>.ddns.net`
-- `streamv-<tuo-id>.ddns.net`
+- `mammamia-<tuo-id>.duckdns.org`
+- `mfp-<tuo-id>.duckdns.org`
+- `streamv-<tuo-id>.duckdns.org`
 
-> 🔔 **Suggerimento:** Usa un identificativo unico (`<tuo-id>`) per evitare conflitti con altri utenti No-IP.
+> 🔔 **Suggerimento:** Usa un identificativo unico (`<tuo-id>`) per evitare conflitti con altri utenti DuckDns.
 
 ### 2. 🔧 Modifica delle regole di firewall per abilitare le porte 80, 443, 8080 su Oracle Cloud Platform
 
@@ -498,7 +472,7 @@ Salva le modifiche. Ora la tua istanza potrà ricevere connessioni su HTTP/HTTPS
 Per ogni applicazione, crea un nuovo **Proxy Host** in NPM seguendo questi passi:
 - **accedi ad http://<ip-tuo-server>:8080** (al primo accesso le credenziali di default sono **Email: admin@example.com Password: changeme**. Vi verrà chiesto di modificarle)
 - **Dalla barra di menu selezionate **Hosts** → **Proxy Hosts** → **Add New Proxy**
-- **Domain Names:** inserisci l’hostname corrispondente (es. `mammamia-<tuo-id>.ddns.net`)
+- **Domain Names:** inserisci l’hostname corrispondente (es. `mammamia-<tuo-id>.duckdns.org`)
 - **Scheme:** `http`
 - **Forward Hostname / IP:** il mome del servizio cosi come configurato nel docker-compose ovvero mammmia, mediaflow_proxy e streamv
 - **Forward Port:** la porta interna dove l’app è in ascolto (es. `8080` per Mammamia, `8888` per mediaflow_proxy e `7860` per streamv)
@@ -528,7 +502,7 @@ Per ogni applicazione, crea un nuovo **Proxy Host** in NPM seguendo questi passi
   ```
   ![image](https://github.com/user-attachments/assets/92fea31d-bb8c-49c5-a887-f3d5486c9f7f)
 
-Ripeti questa configurazione per ciascuno dei tre hostname con la rispettiva porta (ad esempio, `mfp-<tuo-id>.ddns.net` → porta `8001`, ecc.).
+Ripeti questa configurazione per ciascuno dei tre hostname con la rispettiva porta (ad esempio, `mfp-<tuo-id>.duckdns.org` → porta `8888`, ecc.).
 
 ### 4. Verifica e manutenzione
 

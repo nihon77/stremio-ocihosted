@@ -513,7 +513,7 @@ Per ogni applicazione, crea un nuovo **Proxy Host** in NPM seguendo questi passi
   - **Block Common Exploits**
   - **Websockets Support** (se necessario)
   - **Enable HSTS** (opzionale, aumenta la sicurezza)
-  ![image](https://github.com/user-attachments/assets/3ad4e778-81be-492f-9db1-3df5b51f1ed9)
+  ![image](https://github.com/user-attachments/assets/4c86d022-ce56-4f6c-b6b1-3d7a53aad9de)
 
 - **SSL tab:** seleziona:
   - **Enable SSL**

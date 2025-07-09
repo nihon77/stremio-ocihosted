@@ -8,10 +8,10 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y git
 
 # Clone the repository
-RUN git clone --branch main https://github.com/UrloMythus/MammaMia .
+RUN git clone --branch main https://github.com/Johnnymnem/MammamiaetuaUHD .
 
 # Add Refreshed sites config by https://pastebin.com/raw/VrC4D65J (thanks!!!)
-ADD https://raw.githubusercontent.com/nihon77/stremio-selfhosted/refs/heads/main/mammamia/config.json config.json
+# ADD https://raw.githubusercontent.com/nihon77/stremio-selfhosted/refs/heads/main/mammamia/config.json config.json
 ADD https://raw.githubusercontent.com/nihon77/stremio-selfhosted/refs/heads/main/mammamia/update_domains.py update_domains.py
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt

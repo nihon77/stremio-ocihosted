@@ -54,32 +54,32 @@ services:
   #  restart: unless-stopped
   #  networks:
   #    - proxy
-  streamv:
-    build: https://github.com/qwertyuiop8899/StreamV.git#main
-    container_name: streamv
-    env_file:
-      - ./streamv/.env
-    restart: unless-stopped 
-    command: pnpm start
-    networks:
-      - proxy
-  aiostreams:
-    #build: https://github.com/Viren070/AIOStreams.git#main
-    image: ghcr.io/viren070/aiostreams:latest
-    container_name: aiostreams
-    env_file:
-      - ./aiostreams/.env
-    volumes:
-      - aiostreams-data:/app/data
-    restart: unless-stopped 
-    networks:
-      - proxy
+  #streamv:
+  #  build: https://github.com/qwertyuiop8899/StreamV.git#main
+  #  container_name: streamv
+  #  env_file:
+  #    - ./streamv/.env
+  #  restart: unless-stopped 
+  #  command: pnpm start
+  #  networks:
+  #    - proxy
+  #aiostreams:
+  #  #build: https://github.com/Viren070/AIOStreams.git#main
+  #  image: ghcr.io/viren070/aiostreams:latest
+  #  container_name: aiostreams
+  #  env_file:
+  #    - ./aiostreams/.env
+  #  volumes:
+  #    - aiostreams-data:/app/data
+  #  restart: unless-stopped 
+  #  networks:
+  #    - proxy
 
 volumes:
   npm-data:
   npm-letsencrypt:
   duckdns-data:
-  aiostreams-data:
+  #aiostreams-data:
 
 networks:
   proxy:

@@ -27,7 +27,7 @@ services:
     networks:
       - proxy
   mediaflow_proxy:
-    build: https://github.com/mhdzumair/mediaflow-proxy.git
+    build: https://github.com/Johnnymnem/mediaflow-proxy.git
     container_name: mediaflow_proxy
     env_file:
       - ./mfp/.env

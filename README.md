@@ -368,6 +368,10 @@ Per configurare il modulo Media Flow Proxy è necessario configurare il relativo
 ```text
 API_PASSWORD=password
 TRANSPORT_ROUTES={"all://*.ichigotv.net": {"verify_ssl": false}, "all://ichigotv.net": {"verify_ssl": false}}
+# Trust all Docker IPs (less secure but simpler for development)
+FORWARDED_ALLOW_IPS=*
+# or Trust the Docker network range (when nginx and mediaflow-proxy are in same docker network)
+#FORWARDED_ALLOW_IPS=172.20.0.0
 ```
 
 **3. .env per StreamV**
@@ -375,10 +379,40 @@ Per configurare il plugin StreamV è necessario configurare il relativo file .en
 
 📄 Esempio: ./streamv/.env
 ```text
-TMDB_API_KEY="xxxxxxxxxxxxxxxx"
-MFP_PSW="xxxxxxxxx"
-MFP_URL="https://mfp.stremio-mario.duckdns.org"
-BOTHLINK=true
+#############################################
+# StreamViX Environment Configuration
+# Copy this file to .env and adjust values.
+# All variables are optional; defaults are applied in code.
+#############################################
+
+# MediaFlow Proxy
+MFP_URL="xxxxxxxxx"
+MFP_PSW="https://mfp.stremio-mario.ddns.net"
+
+# Feature toggles (true/false)
+ENABLE_MPD=false
+ANIMEUNITY_ENABLED=true
+ANIMESATURN_ENABLED=true
+ANIMEWORLD_ENABLED=true
+
+# Dynamic events extractor behavior
+# Set FAST_DYNAMIC=1 to bypass extractor and use direct URLs from dynamic_channels.json
+FAST_DYNAMIC=0
+# Concurrency for extractor resolution of dynamic events (1-50). Also used as CAP of dynamic links processed.
+DYNAMIC_EXTRACTOR_CONC=10
+
+# TMDB API key override (leave empty to use default)
+TMDB_API_KEY=
+
+
+#############################################
+# Notes:
+# - If both FAST_DYNAMIC=1 and DYNAMIC_EXTRACTOR_CONC are set, FAST wins (extractor skipped).
+# - Tiered priority: (it|ita|italy) first, then (italian|sky|tnt|amazon|dazn|eurosport|prime|bein|canal|sportitalia|now|rai)
+# - ENABLE_MPD defaults to false if unset.
+# - Anime providers default to enabled unless explicitly set to false.
+#############################################
+
 ```
 
 **4. .env per AIOStreams**

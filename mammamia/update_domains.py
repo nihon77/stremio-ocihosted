@@ -72,7 +72,7 @@ def update_json_file():
     streamingcommunity_url = 'https://pastebin.com/raw/KgQ4jTy6'
     streamingcommunity_domains = get_domains(streamingcommunity_url)
 
-    general_pastebin_url = 'https://pastebin.com/raw/E8WAhekV'
+    general_pastebin_url = 'https://pastebin.com/raw/1VfngqVg'
     general_domains = get_domains(general_pastebin_url)
 
     if not general_domains or not streamingcommunity_domains:

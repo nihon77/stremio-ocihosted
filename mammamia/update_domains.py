@@ -72,7 +72,7 @@ def update_json_file():
     streamingcommunity_url = 'https://pastebin.com/raw/KgQ4jTy6'
     streamingcommunity_domains = get_domains(streamingcommunity_url)
 
-    general_pastebin_url = 'https://pastebin.com/raw/E8WAhekV'
+    general_pastebin_url = 'https://pastebin.com/raw/K2tDBYbt'
     general_domains = get_domains(general_pastebin_url)
 
     if not general_domains or not streamingcommunity_domains:
@@ -80,18 +80,16 @@ def update_json_file():
         return
 
     site_mapping = {
-        'StreamingCommunity': streamingcommunity_domains[0],
-        'Filmpertutti': general_domains[1],
-        'Tantifilm': general_domains[2],
-        'LordChannel': general_domains[3],
-        'StreamingWatch': general_domains[4],
-        'CB01': general_domains[5],
-        'DDLStream': general_domains[6],
-        'Guardaserie': general_domains[7],
-        'GuardaHD': general_domains[8],
-        'AnimeWorld': general_domains[9],
-        'SkyStreaming': general_domains[10],
-        'DaddyLiveHD': general_domains[11],
+        'StreamingCommunity': general_domains[0],
+        'StreamingWatch': general_domains[1],
+        'CB01': general_domains[2],
+        'Guardaserie': general_domains[3],
+        'GuardaHD': general_domains[4],
+        'Eurostreaming': general_domains[5],
+        'Guardaflix': general_domains[6],
+        'Guardoserie': general_domains[7],
+        'AnimeWorld': general_domains[8],
+        
     }
 
     for site_key, domain_url in site_mapping.items():

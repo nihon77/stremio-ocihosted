@@ -27,7 +27,7 @@ services:
     networks:
       - proxy
   mediaflow_proxy:
-    build: https://github.com/mhdzumair/mediaflow-proxy.git
+    build: https://github.com/Johnnymnem/mediaflow-proxy.git
     container_name: mediaflow_proxy
     env_file:
       - ./mfp/.env
@@ -55,7 +55,7 @@ services:
   #  networks:
   #    - proxy
   streamv:
-    build: https://github.com/qwertyuiop8899/streamvix.git#main
+    build: https://github.com/Johnnymnem/StreamViX_JM.git#main
     container_name: streamv
     env_file:
       - ./streamv/.env

@@ -1,7 +1,7 @@
 # stremio-ocihosted  
 **Stremio Stack con Mammamia, MediaFlow Proxy e altro ancora**
 
-Questo repository contiene istruzioni, configurazioni e suggerimenti per il self-hosting **Oracle Cloud Free Tier** di un'intera istanza privata di Stremio, con plugin **Mammamia**, **MediaFlow Proxy**, **StreamV**, **AIOStreams** e altri componenti opzionali.
+Questo repository contiene istruzioni, configurazioni e suggerimenti per il self-hosting **Oracle Cloud Free Tier** di un'intera istanza privata di Stremio, con plugin **Mammamia**, **MediaFlow Proxy**, **StreamVix** e altri componenti opzionali.
 
 ---
 
@@ -103,7 +103,6 @@ Puoi ovviamente scegliere qualsiasi nome, purché sia disponibile e facile da ri
 - `mammamia.stremio-mario.duckdns.org`
 - `mfp.stremio-mario.duckdns.org`
 - `streamv.stremio-mario.duckdns.org`
-- `aiostreams.stremio-mario.duckdns.org`
 
 Questi hostname punteranno sempre al tuo NAS anche se il tuo IP cambia.  
 Il tutto è possibile installando un piccolo agente (Dynamic DNS client) che aggiorna automaticamente il record DNS.
@@ -132,10 +131,9 @@ cd <nome-repo>
 |--------------------|----------------------|---------------|------------------------------------------|
 | **[Mammamia](https://github.com/UrloMythus/MammaMia)**|mammamia       | 8080(*)          | Plugin personalizzato per Stremio        |
 | **[MediaFlow Proxy (MFP)](https://github.com/mhdzumair/mediaflow-proxy)**|mediaflow_proxy | 8888(*)   | Proxy per streaming video                |
-| **[StreamV](https://github.com/qwertyuiop8899/StreamV)**|steamv        | 7860(*)          | Web player personalizzato (opzionale)    |
+| **[StreamViX](https://github.com/qwertyuiop8899/streamvix)**|steamv        | 7860(*)          | Web player personalizzato (opzionale)    |
 | **[Nginx Proxy Manager](https://github.com/NginxProxyManager/nginx-proxy-manager)**|npm | 80/443/8080 | Reverse proxy + certificati Let's Encrypt |
 | **[docker-duckdns](https://github.com/linuxserver/docker-duckdns)** |duckdns-updater |—         | Aggiorna il DNS dinamicamente            |
-| **[AIOStreams](https://github.com/Viren070/AIOStreams)** |aiostreams |3000(*)        | multipli Stremio addons e servizi debrid in un solo plugin|
 
 >ℹ️ (*)Le **porte elencate (tranne quelle di Nginx Proxy Manager)** sono **interne alla rete Docker** e **non sono esposte direttamente** sulla macchina host.
 Questo significa che i servizi **non sono accessibili dall’esterno se non tramite Nginx Proxy Manager**, che funge da gateway sicuro con supporto a **HTTPS e Let's Encrypt**.
@@ -346,7 +344,7 @@ docker network create proxy
 ```
 >🔁 Questo comando va eseguito una sola volta. Se la rete esiste già, Docker mostrerà un errore che puoi ignorare in sicurezza.
 
-### 🛠️ Creazione dei file .env per MammaMia, MediaFlow Proxy, StreamV, AIOStreams e docker-duckdns
+### 🛠️ Creazione dei file .env per MammaMia, MediaFlow Proxy, StreamViX e docker-duckdns
 In ogni sotto cartella di questo progetto è presente un file .env_example con tutte le chiavi necessarie per il corretto funzionamento dei vari moduli.
 Per ogni modulo copiare e rinominare il file .env_example in .env. I vari .env dovranno essere modificati in base alle vostre specifiche configurazioni.
 
@@ -374,8 +372,8 @@ FORWARDED_ALLOW_IPS=*
 #FORWARDED_ALLOW_IPS=172.20.0.0
 ```
 
-**3. .env per StreamV**
-Per configurare il plugin StreamV è necessario configurare il relativo file .env. Vi rimando al repo del progetto per i dettagli.
+**3. .env per StreamViX**
+Per configurare il plugin StreamViX è necessario configurare il relativo file .env. Vi rimando al repo del progetto per i dettagli.
 
 📄 Esempio: ./streamv/.env
 ```text
@@ -413,18 +411,12 @@ TMDB_API_KEY=
 # - Anime providers default to enabled unless explicitly set to false.
 #############################################
 
+#Per ottenere correttamente i flussi VixSrc in Full HD (forzatura &h=1 + endpoint synthetic) nelle installazioni locali o su VPS è necessario impostare una variabile d'ambiente che dica all'estrattore qual è la BASE URL pubblicamente raggiungibile del tuo addon. Imposta (SENZA lo slash finale):
+ADDON_BASE_URL=http://streamv.stremio-mario.ddns.net
+
 ```
+> 🔔 **Suggerimento:** in fase di configurazione dell'add-on, nella sezione "Installazioni consigliate" seleziona "OCI/Render" e inserisci url e password del Media Flow Proxy. Abilita i provider di tua scelta.
 
-**4. .env per AIOStreams**
-Per configurare il plugin AIOStreams è necessario configurare il relativo file .env. Vi rimando al repo del progetto per i dettagli.
-
-📄 Esempio: ./AIOStreams/.env
-```text
-#queste sono le impostazioni minime per il corretto funzionamento del plugin
-ADDON_ID="aiostreams.stremio-mario.duckdns.org"
-BASE_URL=https://aiostreams.stremio-mario.duckdns.org
-SECRET_KEY=36148382b90f80430d69075df9848eee87032d16fc4c03fe9ca7ce53b7028973  (può essere generata con openssl rand -hex 32)
-ADDON_PASSWORD=password_a_scelta
 ```
 
 **5. .env per DuckDNS Updater**
@@ -542,7 +534,7 @@ Per ogni applicazione, crea un nuovo **Proxy Host** in NPM seguendo questi passi
 - **Domain Names:** inserisci l’hostname corrispondente (es. `mammamia.stremio-<tuo id>.duckdns.org`)
 - **Scheme:** `http`
 - **Forward Hostname / IP:** il mome del servizio cosi come configurato nel docker-compose ovvero mammmia, mediaflow_proxy e streamv
-- **Forward Port:** la porta interna dove l’app è in ascolto (es. `8080` per Mammamia, `8888` per mediaflow_proxy, `7860` per streamv e `3000` per aiostreams)
+- **Forward Port:** la porta interna dove l’app è in ascolto (es. `8080` per Mammamia, `8888` per mediaflow_proxy e `7860` per streamv)
 - Abilita le seguenti opzioni:
   - **Block Common Exploits**
   - **Websockets Support** (se necessario)

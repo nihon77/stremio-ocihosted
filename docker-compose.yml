@@ -35,7 +35,7 @@ services:
     networks:
       - proxy
   mammamia:
-    build: ./mammamia
+    build: https://github.com/UrloMythus/MammaMia.git#main
     container_name: mammamia
     env_file:
       - ./mammamia/.env
